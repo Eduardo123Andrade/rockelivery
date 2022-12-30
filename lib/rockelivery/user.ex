@@ -40,7 +40,5 @@ defmodule Rockelivery.User do
     change(changeset, Pbkdf2.add_hash(password))
   end
 
-  defp put_password_hash(changeset) do
-    changeset
-  end
+  defp put_password_hash(changeset), do: changeset
 end
