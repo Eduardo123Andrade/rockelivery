@@ -1,6 +1,6 @@
 defmodule Rockelivery.Users.Get do
   alias Ecto.UUID
-  alias Rockelivery.{Repo, User}
+  alias Rockelivery.{Error, Repo, User}
 
   # Just an example
   # def by_id(id) do
@@ -15,17 +15,15 @@ defmodule Rockelivery.Users.Get do
 
   def by_id(id) do
     case UUID.cast(id) do
-      :error -> error_message(:bad_request, "Invalid id format")
+      :error -> {:error, Error.build_format_error()}
       {:ok, id} -> get(id)
     end
   end
 
   defp get(id) do
     case Repo.get(User, id) do
-      nil -> error_message(:not_found, "User not found")
+      nil -> {:error, Error.build_user_not_found_error()}
       user -> {:ok, user}
     end
   end
-
-  defp error_message(status, message), do: {:error, %{status: status, result: message}}
 end
