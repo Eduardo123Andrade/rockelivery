@@ -1,7 +1,7 @@
 defmodule RockeliveryWeb.UsersControllerTest do
   use RockeliveryWeb.ConnCase, async: true
 
-  # import Rockelivery.Factory
+  import Rockelivery.Factory
 
   describe "create/2" do
     test "when all params are valid, creates the user", %{conn: conn} do
@@ -55,6 +55,21 @@ defmodule RockeliveryWeb.UsersControllerTest do
       }
 
       assert expected_response == response
+    end
+  end
+
+  describe "delete/2" do
+    test "when there is a user with the given id, delete this user", %{conn: conn} do
+      id = "957da868-ce7f-4eec-bcdc-97b8c992a60d"
+
+      insert(:user)
+
+      response =
+        conn
+        |> delete(Routes.users_path(conn, :delete, id))
+        |> response(:no_content)
+
+      assert response == ""
     end
   end
 end
