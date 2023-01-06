@@ -1,5 +1,4 @@
 defmodule Rockelivery.User do
-  # alias Phoenix.HTML.FormData.Ecto.Changeset
   alias Ecto.Changeset
   use Ecto.Schema
   import Ecto.Changeset
