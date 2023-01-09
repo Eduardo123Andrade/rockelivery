@@ -72,4 +72,28 @@ defmodule RockeliveryWeb.UsersControllerTest do
       assert response == ""
     end
   end
+
+  describe "show/2" do
+    test "when theres a valid id, return a user", %{conn: conn} do
+      id = "957da868-ce7f-4eec-bcdc-97b8c992a60d"
+
+      insert(:user)
+
+      response =
+        conn
+        |> get(Routes.users_path(conn, :show, id))
+        |> json_response(:ok)
+
+      assert %{
+               "user" => %{
+                 "id" => "957da868-ce7f-4eec-bcdc-97b8c992a60d",
+                 "age" => 26,
+                 "cpf" => "00000000000",
+                 "address" => "Winterfell",
+                 "email" => "email@email",
+                 "name" => "Stark"
+               }
+             } = response
+    end
+  end
 end
