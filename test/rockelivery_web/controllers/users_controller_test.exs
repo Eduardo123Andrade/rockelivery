@@ -71,6 +71,32 @@ defmodule RockeliveryWeb.UsersControllerTest do
 
       assert response == ""
     end
+
+    test "where user not found, return a error", %{conn: conn} do
+      id = "957da868-ce7f-4eec-bcdc-97b8c992a60a"
+
+      insert(:user)
+
+      response =
+        conn
+        |> delete(Routes.users_path(conn, :delete, id))
+        |> json_response(:not_found)
+
+      assert %{"message" => "User not found"} = response
+    end
+
+    test "where given a invalid id, return a error", %{conn: conn} do
+      id = "957da868-ce7f-4eec-bcdc-97b8c992a60"
+
+      insert(:user)
+
+      response =
+        conn
+        |> delete(Routes.users_path(conn, :delete, id))
+        |> json_response(:bad_request)
+
+      assert %{"message" => "Invalid UUID"} = response
+    end
   end
 
   describe "show/2" do
@@ -94,6 +120,32 @@ defmodule RockeliveryWeb.UsersControllerTest do
                  "name" => "Stark"
                }
              } = response
+    end
+
+    test "where user not found, return a error", %{conn: conn} do
+      id = "957da868-ce7f-4eec-bcdc-97b8c992a60a"
+
+      insert(:user)
+
+      response =
+        conn
+        |> delete(Routes.users_path(conn, :delete, id))
+        |> json_response(:not_found)
+
+      assert %{"message" => "User not found"} = response
+    end
+
+    test "where given a invalid id, return a error", %{conn: conn} do
+      id = "957da868-ce7f-4eec-bcdc-97b8c992a60"
+
+      insert(:user)
+
+      response =
+        conn
+        |> delete(Routes.users_path(conn, :delete, id))
+        |> json_response(:bad_request)
+
+      assert %{"message" => "Invalid UUID"} = response
     end
   end
 end
