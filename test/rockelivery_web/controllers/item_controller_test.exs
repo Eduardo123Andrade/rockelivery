@@ -77,8 +77,6 @@ defmodule RockeliveryWeb.ItemControllerTest do
     test "when item not found, return a error", %{conn: conn} do
       id = "957da868-ce7f-4eec-bcdc-97b8c992a60a"
 
-      insert(:item)
-
       response =
         conn
         |> get(Routes.items_path(conn, :show, id))
@@ -90,11 +88,45 @@ defmodule RockeliveryWeb.ItemControllerTest do
     test "where given a invalid id, return a error", %{conn: conn} do
       id = "957da868-ce7f-4eec-bcdc-97b8c992a60"
 
-      insert(:item)
-
       response =
         conn
         |> get(Routes.items_path(conn, :show, id))
+        |> json_response(:bad_request)
+
+      assert %{"message" => "Invalid UUID"} = response
+    end
+  end
+
+  describe "delete/2" do
+    test "when item was founded, delete it", %{conn: conn} do
+      %{id: id} = insert(:item)
+
+      response =
+        conn
+        |> delete(Routes.items_path(conn, :delete, id))
+        |> response(:no_content)
+
+      expected_response = ""
+      assert expected_response == response
+    end
+
+    test "when item not found, return a error", %{conn: conn} do
+      id = "957da868-ce7f-4eec-bcdc-97b8c992a60a"
+
+      response =
+        conn
+        |> delete(Routes.items_path(conn, :delete, id))
+        |> json_response(:not_found)
+
+      assert %{"message" => "Item not found"} = response
+    end
+
+    test "where given a invalid id, return a error", %{conn: conn} do
+      id = "957da868-ce7f-4eec-bcdc-97b8c992a60"
+
+      response =
+        conn
+        |> delete(Routes.items_path(conn, :delete, id))
         |> json_response(:bad_request)
 
       assert %{"message" => "Invalid UUID"} = response
