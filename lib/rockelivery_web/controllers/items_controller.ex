@@ -20,4 +20,12 @@ defmodule RockeliveryWeb.ItemsController do
       |> render("item.json", item: item)
     end
   end
+
+  def delete(conn, %{"id" => id}) do
+    with {:ok, _} <- Rockelivery.delete_item(id) do
+      conn
+      |> put_status(:no_content)
+      |> text("")
+    end
+  end
 end
