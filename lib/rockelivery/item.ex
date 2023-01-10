@@ -18,14 +18,17 @@ defmodule Rockelivery.Item do
   end
 
   def changeset(params) do
-    %__MODULE__{}
-    |> cast(params, @required_params)
-    |> changes(@required_params)
+    changes(%__MODULE__{}, params)
   end
 
-  defp changes(struct, fields) do
+  def changeset(struct, params) do
+    changes(struct, params)
+  end
+
+  defp changes(struct, params) do
     struct
-    |> validate_required(fields)
+    |> cast(params, @required_params)
+    |> validate_required(@required_params)
     |> validate_length(:description, min: 6)
     |> validate_number(:price, greater_than: 0)
   end
