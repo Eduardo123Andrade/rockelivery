@@ -1,6 +1,7 @@
 {
   "skip_files": [
-    "test/support",
-    "folder/file_to_skip.ex"
+    "lib/rockelivery/mailer.ex",
+    "lib/rockelivery/repo.ex",
+    "lib/rockelivery_web.ex"
   ]
 }
