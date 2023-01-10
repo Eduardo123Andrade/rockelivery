@@ -19,6 +19,23 @@ defmodule Rockelivery.Users.UpdateTest do
       assert {:ok, %User{name: "Lord Stark"}} = updated_user
     end
 
+    test "when are invalid param, return a error" do
+      params = build(:user_params)
+
+      {:ok, user} = Create.call(params)
+
+      updated_params = %{"id" => user.id, "age" => 10}
+
+      response = Update.call(updated_params)
+
+      expected_response = %{
+        age: ["must be greater than or equal to 18"]
+      }
+
+      assert {:error, %Error{result: changeset, status: :bad_request}} = response
+      assert errors_on(changeset) == expected_response
+    end
+
     test "when id not found, return a error" do
       id = "957da868-ce7f-4eec-bcdc-97b8c992a60d"
       response = Update.call(%{"id" => id})
