@@ -17,10 +17,11 @@ defmodule Rockelivery.Items.CreateTest do
 
     test "When there are invalid params, return a error" do
       response =
-        build(:item_params, %{price: Decimal.new("0")})
+        build(:item_params, %{price: Decimal.new("0"), category: "invalid_category"})
         |> Create.call()
 
       expected_response = %{
+        category: ["is invalid"],
         price: ["must be greater than 0"]
       }
 
