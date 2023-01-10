@@ -42,5 +42,18 @@ defmodule Rockelivery.UserTest do
 
       assert %Changeset{changes: %{name: "Lord Stark"}, valid?: true} = response
     end
+
+    test "when there some error, return a error" do
+      params = build(:user_params, %{age: 15, password: "123"})
+
+      response = User.changeset(params)
+
+      expected_response = %{
+        age: ["must be greater than or equal to 18"],
+        password: ["should be at least 6 character(s)"]
+      }
+
+      assert errors_on(response) == expected_response
+    end
   end
 end
