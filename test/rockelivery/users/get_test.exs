@@ -7,7 +7,7 @@ defmodule Rockelivery.Users.GetTest do
   alias Rockelivery.Users.Get
 
   describe "by_id/1" do
-    test "when exists a user with id, return a user" do
+    test "when exists a user with this id, return a user" do
       id = "957da868-ce7f-4eec-bcdc-97b8c992a60d"
 
       insert(:user)
