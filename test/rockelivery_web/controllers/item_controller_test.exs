@@ -132,4 +132,49 @@ defmodule RockeliveryWeb.ItemControllerTest do
       assert %{"message" => "Invalid UUID"} = response
     end
   end
+
+  describe "update/2" do
+    test "when all params is valid, return a updated item", %{conn: conn} do
+      %{id: id} = insert(:item)
+
+      updated_params = %{"id" => id, "description" => "Pizza de 4 queijos"}
+
+      response =
+        conn
+        |> put(Routes.items_path(conn, :update, id), updated_params)
+        |> json_response(:ok)
+
+      assert %{
+               "item" => %{
+                 "category" => "food",
+                 "description" => "Pizza de 4 queijos",
+                 "id" => _id,
+                 "photo" => "https://www.google.com",
+                 "price" => "30.0"
+               }
+             } = response
+    end
+
+    test "when item not found, return a error", %{conn: conn} do
+      id = "957da868-ce7f-4eec-bcdc-97b8c992a60a"
+
+      response =
+        conn
+        |> put(Routes.items_path(conn, :update, id))
+        |> json_response(:not_found)
+
+      assert %{"message" => "Item not found"} = response
+    end
+
+    test "where given a invalid id, return a error", %{conn: conn} do
+      id = "957da868-ce7f-4eec-bcdc-97b8c992a60"
+
+      response =
+        conn
+        |> put(Routes.items_path(conn, :update, id))
+        |> json_response(:bad_request)
+
+      assert %{"message" => "Invalid UUID"} = response
+    end
+  end
 end
