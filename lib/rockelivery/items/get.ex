@@ -7,4 +7,10 @@ defmodule Rockelivery.Items.Get do
       item -> {:ok, item}
     end
   end
+
+  def call() do
+    case Repo.all(Item) do
+      items -> {:ok, items}
+    end
+  end
 end
