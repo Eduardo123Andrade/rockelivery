@@ -5,6 +5,8 @@
     "lib/rockelivery_web.ex",
     "lib/rockelivery_web/endpoint.ex",
     "lib/rockelivery_web/gettext.ex",
-    "lib/rockelivery_web/views/error_helpers"
+    "lib/rockelivery_web/views/error_helpers",
+    "lib/rockelivery_web/telemetry.ex",
+    "lib/rockelivery/application.ex"
   ]
 }
