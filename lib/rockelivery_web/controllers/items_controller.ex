@@ -21,6 +21,14 @@ defmodule RockeliveryWeb.ItemsController do
     end
   end
 
+  def index(conn, _) do
+    with {:ok, items} <- Rockelivery.get_item() do
+      conn
+      |> put_status(:ok)
+      |> render("items.json", items: items)
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
     with {:ok, _} <- Rockelivery.delete_item(id) do
       conn
