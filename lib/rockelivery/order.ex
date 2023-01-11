@@ -9,7 +9,7 @@ defmodule Rockelivery.Order do
   @required_params [:address, :comments, :payment_method, :user_id]
   @payment_methods [:money, :credit_card, :debit_card]
 
-  @derive {Jason.Encoder, only: @required_params ++ [:id]}
+  @derive {Jason.Encoder, only: @required_params ++ [:id, :item]}
 
   schema "orders" do
     field :payment_method, Ecto.Enum, values: @payment_methods
