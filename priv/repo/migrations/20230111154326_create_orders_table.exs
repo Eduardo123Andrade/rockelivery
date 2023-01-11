@@ -6,7 +6,6 @@ defmodule Rockelivery.Repo.Migrations.CreateOrdersTable do
       add :address, :string
       add :comments, :string
       add :payment_method, :payment_method
-
       add :user_id, references(:users, type: :binary_id)
 
       timestamps()
