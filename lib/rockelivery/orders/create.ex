@@ -15,8 +15,6 @@ defmodule Rockelivery.Orders.Create do
     |> handle_items(params)
   end
 
-  defp handle_items({:error, result}, _params), do: {:error, Error.build(:bad_request, result)}
-
   defp handle_items({:ok, items}, params) do
     params
     |> Order.changeset(items)
@@ -24,6 +22,8 @@ defmodule Rockelivery.Orders.Create do
     |> handle_insert()
   end
 
-  defp handle_insert({:ok, %Order{} = order}), do: order
+  defp handle_items({:error, result}, _params), do: {:error, Error.build(:bad_request, result)}
+
+  defp handle_insert({:ok, %Order{} = order}), do: {:ok, order}
   defp handle_insert({:error, result}), do: {:error, Error.build(:bad_request, result)}
 end
