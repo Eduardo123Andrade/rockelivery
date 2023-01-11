@@ -1,4 +1,4 @@
-defmodule Rockelivery.Order.Create do
+defmodule Rockelivery.Orders.Create do
   import Ecto.Query
 
   alias Rockelivery.{Error, Item, Order, Repo}
