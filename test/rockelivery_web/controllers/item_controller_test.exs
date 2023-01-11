@@ -97,6 +97,40 @@ defmodule RockeliveryWeb.ItemControllerTest do
     end
   end
 
+  describe "index/2" do
+    test "return all items", %{conn: conn} do
+      insert(:item)
+      insert(:item, %{id: "c29d68c9-f2a0-4326-b321-50c02f7a37ae"})
+
+      response =
+        conn
+        |> get(Routes.items_path(conn, :index))
+        |> json_response(:ok)
+
+      [first_item | _] = response
+      expected_quantity_of_items = 2
+
+      assert expected_quantity_of_items == Enum.count(response)
+
+      assert %{
+               "category" => "food",
+               "description" => "Pizza de frango",
+               "id" => "70247b75-fd37-4c21-bead-ae4996696f9e",
+               "photo" => "https://www.google.com",
+               "price" => "30.0"
+             } = first_item
+    end
+
+    test "when doesn't have item, return a empty array", %{conn: conn} do
+      response =
+        conn
+        |> get(Routes.items_path(conn, :index))
+        |> json_response(:ok)
+
+      assert Enum.empty?(response) == true
+    end
+  end
+
   describe "delete/2" do
     test "when item was founded, delete it", %{conn: conn} do
       %{id: id} = insert(:item)
