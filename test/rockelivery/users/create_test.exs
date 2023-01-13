@@ -13,19 +13,7 @@ defmodule Rockelivery.Users.CreateTest do
       params = build(:user_params)
 
       expect(ClientMock, :get_cep_info, fn _cep ->
-        {:ok,
-         %{
-           "cep" => "01001-000",
-           "logradouro" => "Praça da Sé",
-           "complemento" => "lado ímpar",
-           "bairro" => "Sé",
-           "localidade" => "São Paulo",
-           "uf" => "SP",
-           "ibge" => "3550308",
-           "gia" => "1004",
-           "ddd" => "11",
-           "siafi" => "7107"
-         }}
+        {:ok, build(:cep_info)}
       end)
 
       response = Create.call(params)
