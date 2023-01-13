@@ -20,6 +20,8 @@ config :rockelivery, RockeliveryWeb.Endpoint,
   secret_key_base: "iswKXBCVGumTMroAaD7iEONowFvJYOe7v0k1HwC3xF92VgjIpCK3lcUax33FBCXY",
   server: false
 
+config :rockelivery, Rockelivery.Users.Create, via_cep_adapter: Rockelivery.ViaCep.ClientMock
+
 # In test we don't send emails.
 config :rockelivery, Rockelivery.Mailer, adapter: Swoosh.Adapters.Test
 
