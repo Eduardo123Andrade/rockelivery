@@ -1,14 +1,32 @@
 defmodule Rockelivery.Users.UpdateTest do
   use Rockelivery.DataCase, async: true
 
+  import Mox
   import Rockelivery.Factory
 
   alias Rockelivery.{Error, User}
   alias Rockelivery.Users.{Create, Update}
+  alias Rockelivery.ViaCep.ClientMock
 
   describe "call/1" do
     test "when all params are valid, return a user with updated data" do
       params = build(:user_params)
+
+      expect(ClientMock, :get_cep_info, fn _cep ->
+        {:ok,
+         %{
+           "cep" => "01001-000",
+           "logradouro" => "Praça da Sé",
+           "complemento" => "lado ímpar",
+           "bairro" => "Sé",
+           "localidade" => "São Paulo",
+           "uf" => "SP",
+           "ibge" => "3550308",
+           "gia" => "1004",
+           "ddd" => "11",
+           "siafi" => "7107"
+         }}
+      end)
 
       {:ok, user} = Create.call(params)
 
@@ -21,6 +39,22 @@ defmodule Rockelivery.Users.UpdateTest do
 
     test "when are invalid param, return a error" do
       params = build(:user_params)
+
+      expect(ClientMock, :get_cep_info, fn _cep ->
+        {:ok,
+         %{
+           "cep" => "01001-000",
+           "logradouro" => "Praça da Sé",
+           "complemento" => "lado ímpar",
+           "bairro" => "Sé",
+           "localidade" => "São Paulo",
+           "uf" => "SP",
+           "ibge" => "3550308",
+           "gia" => "1004",
+           "ddd" => "11",
+           "siafi" => "7107"
+         }}
+      end)
 
       {:ok, user} = Create.call(params)
 
