@@ -5,15 +5,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
 
   describe "create/2" do
     test "when all params are valid, creates the user", %{conn: conn} do
-      params = %{
-        "age" => 26,
-        "address" => "Winterfell",
-        "cep" => "00000000",
-        "cpf" => "00000000000",
-        "email" => "email@email",
-        "password" => "123123",
-        "name" => "Stark"
-      }
+      params = build(:user_params)
 
       response =
         conn
@@ -60,9 +52,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
 
   describe "delete/2" do
     test "when there is a user with the given id, delete this user", %{conn: conn} do
-      id = "957da868-ce7f-4eec-bcdc-97b8c992a60d"
-
-      insert(:user)
+      %{id: id} = insert(:user)
 
       response =
         conn
@@ -101,9 +91,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
 
   describe "show/2" do
     test "when theres a valid id, return a user", %{conn: conn} do
-      id = "957da868-ce7f-4eec-bcdc-97b8c992a60d"
-
-      insert(:user)
+      %{id: id} = insert(:user)
 
       response =
         conn
@@ -152,7 +140,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
   describe "update2" do
     test "when all parameters are valid, return a updated user", %{conn: conn} do
       id = "957da868-ce7f-4eec-bcdc-97b8c992a60d"
-      update_params = build(:user_params, %{name: "Lord Stark", age: 30, id: id})
+      update_params = build(:user_params, %{"name" => "Lord Stark", "age" => 30, "id" => id})
 
       insert(:user)
 
@@ -166,6 +154,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
           "address" => "Winterfell",
           "age" => 30,
           "cpf" => "00000000000",
+          "cep" => "00000000",
           "email" => "email@email",
           "id" => "957da868-ce7f-4eec-bcdc-97b8c992a60d",
           "name" => "Lord Stark"
@@ -177,7 +166,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
 
     test "when some params are invalid, return a error", %{conn: conn} do
       id = "957da868-ce7f-4eec-bcdc-97b8c992a60d"
-      update_params = build(:user_params, %{age: 10, id: id})
+      update_params = build(:user_params, %{"age" => 10, "id" => id})
 
       insert(:user)
 
@@ -198,7 +187,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
 
       response =
         conn
-        |> delete(Routes.users_path(conn, :delete, id))
+        |> put(Routes.users_path(conn, :update, id))
         |> json_response(:not_found)
 
       assert %{"message" => "User not found"} = response
@@ -211,7 +200,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
 
       response =
         conn
-        |> delete(Routes.users_path(conn, :delete, id))
+        |> put(Routes.users_path(conn, :update, id))
         |> json_response(:bad_request)
 
       assert %{"message" => "Invalid UUID"} = response
