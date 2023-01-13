@@ -9,7 +9,7 @@ defmodule Rockelivery.User do
   @required_params [:age, :address, :cep, :cpf, :email, :password, :name]
   @update_params @required_params -- [:password]
 
-  @derive {Jason.Encoder, only: [:id, :age, :cpf, :address, :email, :name]}
+  @derive {Jason.Encoder, only: [:id, :age, :cpf, :address, :email, :name, :cep]}
 
   schema "users" do
     field :age, :integer
@@ -25,6 +25,8 @@ defmodule Rockelivery.User do
 
     timestamps()
   end
+
+  def build(changeset), do: apply_action(changeset, :create_user)
 
   def changeset(params) do
     %__MODULE__{}
