@@ -5,6 +5,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
   import Rockelivery.Factory
 
   alias Rockelivery.ViaCep.ClientMock
+  alias RockeliveryWeb.Auth.Guardian
 
   describe "create/2" do
     test "when all params are valid, creates the user", %{conn: conn} do
@@ -58,9 +59,14 @@ defmodule RockeliveryWeb.UsersControllerTest do
   end
 
   describe "delete/2" do
-    test "when there is a user with the given id, delete this user", %{conn: conn} do
-      %{id: id} = insert(:user)
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+      {:ok, conn: conn, id: user.id}
+    end
 
+    test "when there is a user with the given id, delete this user", %{conn: conn, id: id} do
       response =
         conn
         |> delete(Routes.users_path(conn, :delete, id))
@@ -72,8 +78,6 @@ defmodule RockeliveryWeb.UsersControllerTest do
     test "where user not found, return a error", %{conn: conn} do
       id = "957da868-ce7f-4eec-bcdc-97b8c992a60a"
 
-      insert(:user)
-
       response =
         conn
         |> delete(Routes.users_path(conn, :delete, id))
@@ -83,9 +87,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
     end
 
     test "where given a invalid id, return a error", %{conn: conn} do
-      id = "957da868-ce7f-4eec-bcdc-97b8c992a60"
-
-      insert(:user)
+      id = "invalid uuid"
 
       response =
         conn
@@ -97,9 +99,14 @@ defmodule RockeliveryWeb.UsersControllerTest do
   end
 
   describe "show/2" do
-    test "when theres a valid id, return a user", %{conn: conn} do
-      %{id: id} = insert(:user)
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+      {:ok, conn: conn, id: user.id}
+    end
 
+    test "when theres a valid id, return a user", %{conn: conn, id: id} do
       response =
         conn
         |> get(Routes.users_path(conn, :show, id))
@@ -120,8 +127,6 @@ defmodule RockeliveryWeb.UsersControllerTest do
     test "where user not found, return a error", %{conn: conn} do
       id = "957da868-ce7f-4eec-bcdc-97b8c992a60a"
 
-      insert(:user)
-
       response =
         conn
         |> delete(Routes.users_path(conn, :delete, id))
@@ -131,9 +136,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
     end
 
     test "where given a invalid id, return a error", %{conn: conn} do
-      id = "957da868-ce7f-4eec-bcdc-97b8c992a60"
-
-      insert(:user)
+      id = "invalid uuid"
 
       response =
         conn
@@ -145,11 +148,15 @@ defmodule RockeliveryWeb.UsersControllerTest do
   end
 
   describe "update2" do
-    test "when all parameters are valid, return a updated user", %{conn: conn} do
-      id = "957da868-ce7f-4eec-bcdc-97b8c992a60d"
-      update_params = build(:user_params, %{"name" => "Lord Stark", "age" => 30, "id" => id})
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+      {:ok, conn: conn, id: user.id}
+    end
 
-      insert(:user)
+    test "when all parameters are valid, return a updated user", %{conn: conn, id: id} do
+      update_params = build(:user_params, %{"name" => "Lord Stark", "age" => 30, "id" => id})
 
       response =
         conn
@@ -171,11 +178,8 @@ defmodule RockeliveryWeb.UsersControllerTest do
       assert expected_response == response
     end
 
-    test "when some params are invalid, return a error", %{conn: conn} do
-      id = "957da868-ce7f-4eec-bcdc-97b8c992a60d"
+    test "when some params are invalid, return a error", %{conn: conn, id: id} do
       update_params = build(:user_params, %{"age" => 10, "id" => id})
-
-      insert(:user)
 
       response =
         conn
@@ -190,8 +194,6 @@ defmodule RockeliveryWeb.UsersControllerTest do
     test "where user not found, return a error", %{conn: conn} do
       id = "957da868-ce7f-4eec-bcdc-97b8c992a60a"
 
-      insert(:user)
-
       response =
         conn
         |> put(Routes.users_path(conn, :update, id))
@@ -201,9 +203,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
     end
 
     test "where given a invalid id, return a error", %{conn: conn} do
-      id = "957da868-ce7f-4eec-bcdc-97b8c992a60"
-
-      insert(:user)
+      id = "invalid uuid"
 
       response =
         conn

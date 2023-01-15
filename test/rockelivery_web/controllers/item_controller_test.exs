@@ -2,8 +2,16 @@ defmodule RockeliveryWeb.ItemControllerTest do
   use RockeliveryWeb.ConnCase, async: true
 
   import Rockelivery.Factory
+  alias RockeliveryWeb.Auth.Guardian
 
   describe "create/2" do
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+      {:ok, conn: conn}
+    end
+
     test "when all params is valid, create a item", %{conn: conn} do
       params = %{
         "category" => "food",
@@ -53,6 +61,13 @@ defmodule RockeliveryWeb.ItemControllerTest do
   end
 
   describe "show/2" do
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+      {:ok, conn: conn}
+    end
+
     test "when find item with this id, return a item", %{conn: conn} do
       %{id: id} = insert(:item)
 
@@ -98,6 +113,13 @@ defmodule RockeliveryWeb.ItemControllerTest do
   end
 
   describe "index/2" do
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+      {:ok, conn: conn}
+    end
+
     test "return all items", %{conn: conn} do
       insert(:item)
       insert(:item, %{id: "c29d68c9-f2a0-4326-b321-50c02f7a37ae"})
@@ -132,6 +154,13 @@ defmodule RockeliveryWeb.ItemControllerTest do
   end
 
   describe "delete/2" do
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+      {:ok, conn: conn}
+    end
+
     test "when item was founded, delete it", %{conn: conn} do
       %{id: id} = insert(:item)
 
@@ -168,6 +197,13 @@ defmodule RockeliveryWeb.ItemControllerTest do
   end
 
   describe "update/2" do
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+      {:ok, conn: conn}
+    end
+
     test "when all params is valid, return a updated item", %{conn: conn} do
       %{id: id} = insert(:item)
 
