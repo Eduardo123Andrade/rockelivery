@@ -1,17 +1,17 @@
 defmodule Rockelivery.Orders.ValidateUuid do
   # alias Ecto.Changeset
   # alias Rockelivery.Orders.ItemsParams
-  alias Rockelivery.Error
   alias Ecto.UUID
+  alias Rockelivery.Error
 
   def call(items_params) do
     items_params
-    |> Enum.map(fn value -> validate_UUID(value) end)
+    |> Enum.map(fn value -> validate_uuid(value) end)
     |> Enum.filter(fn {status, _} -> status == :error end)
     |> handle_uuid(items_params)
   end
 
-  defp validate_UUID(%{"id" => id} = value) do
+  defp validate_uuid(%{"id" => id} = value) do
     case UUID.cast(id) do
       :error -> {:error, "Invalid id"}
       {:ok, _uuid} -> {:ok, value}

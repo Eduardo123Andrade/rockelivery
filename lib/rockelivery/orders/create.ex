@@ -2,7 +2,7 @@ defmodule Rockelivery.Orders.Create do
   import Ecto.Query
 
   alias Rockelivery.{Error, Item, Order, Repo}
-  alias Rockelivery.Orders.{ValidateItems, ValidateAndMultiplyItems, ValidateUuid}
+  alias Rockelivery.Orders.{ValidateAndMultiplyItems, ValidateItems, ValidateUuid}
 
   def call(%{"items" => items_params} = params) do
     with {:ok, valid_items} <- ValidateItems.call(items_params),

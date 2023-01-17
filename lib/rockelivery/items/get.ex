@@ -1,5 +1,5 @@
 defmodule Rockelivery.Items.Get do
-  alias Rockelivery.{Error, Repo, Item}
+  alias Rockelivery.{Error, Item, Repo}
 
   def call(id) do
     case Repo.get(Item, id) do
@@ -8,7 +8,7 @@ defmodule Rockelivery.Items.Get do
     end
   end
 
-  def call() do
+  def call do
     case Repo.all(Item) do
       items -> {:ok, items}
     end

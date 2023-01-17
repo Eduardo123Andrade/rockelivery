@@ -1,5 +1,5 @@
 defmodule Rockelivery.Items.Delete do
-  alias Rockelivery.{Error, Repo, Item}
+  alias Rockelivery.{Error, Item, Repo}
 
   def call(id) do
     case Repo.get(Item, id) do

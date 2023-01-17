@@ -1,7 +1,7 @@
 defmodule Rockelivery.Orders.ValidateItems do
   alias Ecto.Changeset
-  alias Rockelivery.Orders.ItemsParams
   alias Rockelivery.Error
+  alias Rockelivery.Orders.ItemsParams
 
   def call(items_params) do
     items_params
