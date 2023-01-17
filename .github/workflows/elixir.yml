@@ -50,7 +50,7 @@ jobs:
       run: mix credo --strict
 
     - name: Check coverage
-      run: mix coverall.json
+      run: mix coveralls.json
       env:
         MIX_ENV: test
 
